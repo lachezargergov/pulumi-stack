@@ -2,8 +2,10 @@ import os
 import pulumi
 import pulumi_snowflake as snowflake 
 
+
+# Create Snowflake resource provider
+# Extract the account name from the account url and add the region after ('kr89218.eu-west-1')
 def create_snowflake_provider():
-    # Create Snowflake resource provider
     snowflake_account = os.environ.get("SNOWFLAKE_ACCOUNT")
     snowflake_username = os.environ.get("SNOWFLAKE_USERNAME")
     snowflake_password = os.environ.get("SNOWFLAKE_PASSWORD")
@@ -14,14 +16,16 @@ def create_snowflake_provider():
                               password=snowflake_password
                               )
 
-def create_snowflake_database(provider):
-    # Create a Snowflake database
-    return snowflake.Database("my_database",
-                               name="MY_DATABASE",
-                               opts=pulumi.ResourceOptions(provider=provider))
 
+# Create a Snowflake database
+def create_snowflake_database(provider):
+    return snowflake.Database("my_database",
+                              name="MY_DATABASE",
+                              opts=pulumi.ResourceOptions(provider=provider))
+
+
+# Create a Snowflake warehouse
 def create_snowflake_warehouse(provider):
-    # Create a Snowflake warehouse
     return snowflake.Warehouse("my_warehouse",
                       name="MY_WAREHOUSE",
                       warehouse_size="Small",
@@ -29,16 +33,18 @@ def create_snowflake_warehouse(provider):
                       auto_resume=True,
                       opts=pulumi.ResourceOptions(provider=provider))
 
+
+# Create a Snowflake user
 def create_snowflake_user():
-    # Create a Snowflake user
     return snowflake.User("SampleUser111",
-                          login_name="SampleUser222",
-                          default_role="SYSADMIN",  
-                          disabled=False,           
-                          first_name="John",
-                          last_name="Doe",
-                          email="john.doe@example.com",
-                          password="V3ryStr0ngP4ssW0rd")
+                        login_name="SampleUser222",
+                        default_role="SYSADMIN",  
+                        disabled=False,           
+                        first_name="John",
+                        last_name="Doe",
+                        email="john.doe@example.com",
+                        password="V3ryStr0ngP4ssW0rd")
+
 
 if __name__ == "__main__":
     provider = create_snowflake_provider()
